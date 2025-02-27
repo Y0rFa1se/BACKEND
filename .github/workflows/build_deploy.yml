@@ -60,6 +60,10 @@ jobs:
                 sleep 5
               done
 
+              docker stop backend-2 || true
+              docker rm backend-2 || true
+              docker rmi backend-2 || true
+
             else
               docker build -t backend-1 .
               echo "Neither exists"
