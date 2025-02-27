@@ -41,7 +41,7 @@ jobs:
             if [ -n "$(docker ps -q -f "name backend-1")" ]; then
               docker build -t backend-2 .
               echo  backend-1 exists"
-              docker run -d --name backend-2 -v backend:/app/backend -p 8004:8001 backend-2
+              docker run -d --restart=always --name backend-2 -v backend:/app/backend -p 8004:8001 backend-2
 
               while ! curl -s http://192.168.0.18:8004; do
                 sleep 5
@@ -54,7 +54,7 @@ jobs:
             elif [ -n "$(docker ps -q -f "name backend-2")" ]; then
               docker build -t backend-1 .
               echo  backend-2 exists"
-              docker run -d --name backend-1 -v backend:/app/backend -p 8003:8001 backend-1
+              docker run -d --restart=always --name backend-1 -v backend:/app/backend -p 8003:8001 backend-1
 
               while ! curl -s http://192.168.0.18:8003; do
                 sleep 5
@@ -63,6 +63,6 @@ jobs:
             else
               docker build -t backend-1 .
               echo "Neither exists"
-              docker run -d --name backend-1 -v backend:/app/backend -p 8003:8001 backend-1
+              docker run -d --restart=always --name backend-1 -v backend:/app/backend -p 8003:8001 backend-1
 
             fi
