@@ -8,7 +8,7 @@ router = APIRouter()
 @router.get("/stock/tickers")
 async def api_get_stock_tickers(request: Request, password: str = None):
     host = request.client.host
-    if not (host == "192.168.0.18" or host == "127.0.0.1" or host == "::1"):
+    if not (host.startswith("192.168.0.18") or host.startswith("127.0.0.1") or host.startswith("::1")):
         if password != os.getenv("GUEST_PASSWORD"):
             return {"error": "Invalid password"}
     
@@ -17,7 +17,7 @@ async def api_get_stock_tickers(request: Request, password: str = None):
 @router.get("/stock/prices/{ticker}")
 async def api_get_stock_prices(request: Request, ticker: str, password: str = None):
     host = request.client.host
-    if not (host == "192.168.0.18" or host == "127.0.0.1" or host == "::1"):
+    if not (host.startswith("192.168.0.18") or host.startswith("127.0.0.1") or host.startswith("::1")):
         if password != os.getenv("GUEST_PASSWORD"):
             return {"error": "Invalid password"}
     
