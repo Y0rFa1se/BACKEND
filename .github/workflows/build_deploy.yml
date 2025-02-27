@@ -28,11 +28,11 @@ jobs:
               cd BACKEND
               git reset --hard
               git clean -fd
-              git checkout DEPLOY
-              git pull origin DEPLOY
+              git checkout main
+              git pull origin main
             else
               echo "Directory does not exist. Cloning repository."
-              git clone --branch DEPLOY https://github.com/Y0rFa1se/BACKEND.git
+              git clone https://github.com/Y0rFa1se/BACKEND.git
               cd BACKEND
             fi
 
