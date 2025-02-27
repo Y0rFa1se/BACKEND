@@ -1,0 +1,84 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - DEPLOY
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: server_config
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd ~/docker/web
+
+            if [ -d "BACKEND" ]; then
+              echo "Directory exists. Pulling latest changes."
+              cd BACKEND
+              git reset --hard
+              git clean -fd
+              git checkout DEPLOY
+              git pull origin DEPLOY
+            else
+              echo "Directory does not exist. Cloning repository."
+              git clone --branch DEPLOY https://github.com/Y0rFa1se/BACKEND.git
+            fi
+
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dot_env
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Deploy
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          script: |
+            cd ~/docker/web/BACKEND
+
+            echo "${{ secrets.DOTENV }}" > .env
+
+            if [ -n "$(docker ps -q -f "name=BACKEND-1")" ]; then
+              docker build -t BACKEND-2 .
+              echo "BACKEND-1 exists"
+              docker run -d --name BACKEND-2 -v backend:/app/backend -p 8002:8001 BACKEND-2
+
+              while ! curl -s http://192.168.0.18:8002; do
+                sleep 5
+              done
+
+              docker stop BACKEND-1 || true
+              docker rm BACKEND-1 || true
+              docker rmi BACKEND-1 || true
+
+            elif [ -n "$(docker ps -q -f "name=BACKEND-2")" ]; then
+              docker build -t BACKEND-1 .
+              echo "BACKEND-2 exists"
+              docker run -d --name BACKEND-1 -v backend:/app/backend -p 8001:8001 BACKEND-1
+
+              while ! curl -s http://192.168.0.18:8001; do
+                sleep 5
+              done
+
+            else
+              docker build -t BACKEND-1 .
+              echo "Neither exists"
+              docker run -d --name BACKEND-1 -v backend:/app/backend -p 8001:8001 BACKEND-1
+
+            fi
