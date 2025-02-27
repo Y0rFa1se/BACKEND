@@ -36,6 +36,7 @@ jobs:
               cd BACKEND
             fi
 
+            rm .env
             echo "${{ secrets.DOT_ENV }}" > .env
 
             if [ -n "$(docker ps -q -f "name=backend-1")" ]; then
