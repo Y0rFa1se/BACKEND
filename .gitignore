@@ -1,7 +1,9 @@
 .env
 
-backend/
+web/
 
 __pycache__/
 *.pyc
 *.pyo
+
+.DS_Store
