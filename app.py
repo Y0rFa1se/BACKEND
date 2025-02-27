@@ -8,7 +8,8 @@ from routes.configs import router as config_router
 from routes.database import router as database_router
 
 load_dotenv()
-os.makedirs("backend/storage", exist_ok=True)
+os.makedirs("web/storage", exist_ok=True)
+os.makedirs("web/fastapi/logs", exist_ok=True)
 
 app = FastAPI()
 

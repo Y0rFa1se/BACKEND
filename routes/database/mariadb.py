@@ -8,6 +8,10 @@ router = APIRouter()
 @router.get("/stock/tickers")
 async def api_get_stock_tickers(request: Request, password: str = None):
     host = request.client.host
+
+    with open("web/fastapi/logs/mariadb.log", "a") as f:
+        f.write(f"Host: {host}\n")
+
     if not (host.startswith("192.168.0.18") or host.startswith("127.0.0.1") or host.startswith("::1")):
         if password != os.getenv("GUEST_PASSWORD"):
             return {"error": "Invalid password"}
@@ -17,6 +21,10 @@ async def api_get_stock_tickers(request: Request, password: str = None):
 @router.get("/stock/prices/{ticker}")
 async def api_get_stock_prices(request: Request, ticker: str, password: str = None):
     host = request.client.host
+
+    with open("web/fastapi/logs/mariadb.log", "a") as f:
+        f.write(f"Host: {host}\n")
+        
     if not (host.startswith("192.168.0.18") or host.startswith("127.0.0.1") or host.startswith("::1")):
         if password != os.getenv("GUEST_PASSWORD"):
             return {"error": "Invalid password"}
