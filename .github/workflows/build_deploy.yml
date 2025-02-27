@@ -33,26 +33,10 @@ jobs:
             else
               echo "Directory does not exist. Cloning repository."
               git clone --branch DEPLOY https://github.com/Y0rFa1se/BACKEND.git
+              cd BACKEND
             fi
 
-  deploy:
-    runs-on: ubuntu-latest
-    environment: dot_env
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-
-      - name: Deploy
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          password: ${{ secrets.SERVER_PASSWORD }}
-          script: |
-            cd ~/docker/web/BACKEND
-
-            echo "${{ secrets.DOTENV }}" > .env
+            echo "${{ secrets.DOT_ENV }}" > .env
 
             if [ -n "$(docker ps -q -f "name=BACKEND-1")" ]; then
               docker build -t BACKEND-2 .
