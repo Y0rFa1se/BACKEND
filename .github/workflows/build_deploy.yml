@@ -38,7 +38,7 @@ jobs:
 
             echo "${{ secrets.DOT_ENV }}" > .env
 
-            if [ -n "$(docker ps -q -f "name backend-1")" ]; then
+            if [ -n "$(docker ps -q -f "name=backend-1")" ]; then
               docker build -t backend-2 .
               echo "backend-1 exists"
               docker run -d --restart=always --name backend-2 -v backend:/app/backend -p 8004:8001 backend-2
@@ -51,7 +51,7 @@ jobs:
               docker rm backend-1 || true
               docker rmi backend-1 || true
 
-            elif [ -n "$(docker ps -q -f "name backend-2")" ]; then
+            elif [ -n "$(docker ps -q -f "name=backend-2")" ]; then
               docker build -t backend-1 .
               echo "backend-2 exists"
               docker run -d --restart=always --name backend-1 -v backend:/app/backend -p 8003:8001 backend-1
