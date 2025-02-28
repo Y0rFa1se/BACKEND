@@ -3,3 +3,4 @@ uvicorn[standard]
 gunicorn
 python-dotenv
 pymysql
+python-multipart
