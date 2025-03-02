@@ -3,10 +3,10 @@ import os
 
 async def get_db_connection(db_name: str):
     connection = pymysql.connect(
-        host = os.getenv("HOST"),
-        user = "root",
+        host = os.getenv("MARIADB_HOST"),
+        user = os.getenv("MARIADB_USER"),
         password = os.getenv("MARIADB_PASSWORD"),
-        database = "mysql",
+        database = os.getenv("MARIADB_DATABASE"),
         cursorclass = pymysql.cursors.DictCursor
     )
 
