@@ -4,3 +4,4 @@ gunicorn
 python-dotenv
 pymysql
 python-multipart
+redis
