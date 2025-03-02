@@ -7,6 +7,7 @@ import os
 
 from routes.configs import router as config_router
 from routes.database import router as database_router
+from routes.storage import router as storage_router
 
 load_dotenv()
 os.makedirs("web/storage", exist_ok=True)
@@ -24,3 +25,4 @@ app.add_middleware(
 
 app.include_router(config_router, prefix="/configs")
 app.include_router(database_router, prefix="/database")
+app.include_router(storage_router, prefix="/storage")
