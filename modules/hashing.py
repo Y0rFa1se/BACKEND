@@ -11,3 +11,9 @@ def get_hash(string):
     string = string.hexdigest()
 
     return string
+
+
+
+if __name__ == "__main__":
+    s = input("Enter password: ")
+    print(get_hash(s))

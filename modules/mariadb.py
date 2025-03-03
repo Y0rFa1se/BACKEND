@@ -14,6 +14,31 @@ async def get_db_connection(db_name: str):
 
     return connection
 
+async def is_password_right(username: str, password: str):
+    conn = await get_db_connection("web")
+    c = conn.cursor()
+
+    c.execute(f"SELECT password FROM users WHERE username = '{username}'")
+    result = c.fetchone()
+
+    conn.close()
+
+    if result is None:
+        return False
+    
+    return result["password"] == password
+
+async def get_user_permission(username: str):
+    conn = await get_db_connection("web")
+    c = conn.cursor()
+
+    c.execute(f"SELECT permission FROM users WHERE username = '{username}'")
+    result = c.fetchone()
+
+    conn.close()
+
+    return result["permission"]
+
 async def get_stock_tickers():
     conn = await get_db_connection("stock_prices")
     c = conn.cursor()

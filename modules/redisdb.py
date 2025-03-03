@@ -33,3 +33,9 @@ async def renew_redis_key(key: str, ex: int):
     conn.expire(key, ex)
 
     return True
+
+async def delete_redis_key(key: str):
+    conn = await get_redis_connection()
+    conn.delete(key)
+
+    return True
