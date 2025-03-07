@@ -1,7 +1,7 @@
 from modules.logs import log
 from modules.authorize import is_local
 from modules.mariadb import is_password_right, get_user_permission
-from modules.redisdb import get_redis_val, does_redis_exist, set_redis_val, renew_redis_key, delete_redis_key
+from modules.redisdb import get_redis_val, does_redis_exist, set_redis_val, renew_redis_key, delete_redis_key, redis_ping
 from modules.hashing import get_hash
 
 import secrets
@@ -14,7 +14,7 @@ router = APIRouter()
 async def ping(request: Request):
     log("session", f"Host: {request.client.host} ping")
 
-    return {"success": "pong"}
+    return {"success": await redis_ping()}
 
 @router.get("/session/login")
 async def login(request: Request, username: str, password: str):
