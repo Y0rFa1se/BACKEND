@@ -10,6 +10,12 @@ from fastapi import APIRouter, Request
 
 router = APIRouter()
 
+@router.get("/session/ping")
+async def ping(request: Request):
+    log("session", f"Host: {request.client.host} ping")
+
+    return {"success": "pong"}
+
 @router.get("/session/login")
 async def login(request: Request, username: str, password: str):
     log("session", f"Host: {request.client.host} login")
