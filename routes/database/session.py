@@ -15,9 +15,6 @@ async def login(request: Request, username: str, password: str):
     log("session", f"Host: {request.client.host} login")
 
     password = get_hash(password)
-
-    if not is_local(request):
-        return {"error": "Invalid IP address"}
     
     if not await is_password_right(username, password):
         return {"error": "Invalid username or password"}
@@ -33,9 +30,6 @@ async def login(request: Request, username: str, password: str):
 async def check(request: Request, session_id: str):
     log("session", f"Host: {request.client.host} check")
 
-    if not is_local(request):
-        return {"error": "Invalid IP address"}
-
     if not await does_redis_exist(session_id):
         return {"error": "Invalid session ID"}
     
@@ -46,9 +40,6 @@ async def check(request: Request, session_id: str):
 @router.get("/session/logout")
 async def logout(request: Request, session_id: str):
     log("session", f"Host: {request.client.host} logout")
-
-    if not is_local(request):
-        return {"error": "Invalid IP address"}
 
     if not await does_redis_exist(session_id):
         return {"error": "Invalid session ID"}
@@ -61,9 +52,6 @@ async def logout(request: Request, session_id: str):
 async def get_username(request: Request, session_id: str):
     log("session", f"Host: {request.client.host} get_username")
 
-    if not is_local(request):
-        return {"error": "Invalid IP address"}
-
     if not await does_redis_exist(session_id):
         return {"error": "Invalid session ID"}
     
@@ -72,9 +60,6 @@ async def get_username(request: Request, session_id: str):
 @router.get("/session/permission")
 async def get_permission(request: Request, session_id: str):
     log("session", f"Host: {request.client.host} get_permission")
-
-    if not is_local(request):
-        return {"error": "Invalid IP address"}
 
     if not await does_redis_exist(session_id):
         return {"error": "Invalid session ID"}
