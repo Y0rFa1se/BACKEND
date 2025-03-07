@@ -20,7 +20,7 @@ def authorize(request, password):
     
     host = req_to_host(request)
     
-    if password == os.getenv("GUEST_PASSWORD"):
+    if password == os.getenv("API_PASSWORD"):
         return True
     
     return False

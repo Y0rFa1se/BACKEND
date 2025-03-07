@@ -15,5 +15,9 @@ def get_hash(string):
 
 
 if __name__ == "__main__":
+    from dotenv import load_dotenv
+
+    load_dotenv()
+
     s = input("Enter password: ")
     print(get_hash(s))

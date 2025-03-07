@@ -2,6 +2,7 @@ from modules.logs import log
 from modules.authorize import is_local
 from modules.mariadb import is_password_right, get_user_permission
 from modules.redisdb import get_redis_val, does_redis_exist, set_redis_val, renew_redis_key, delete_redis_key
+from modules.hashing import get_hash
 
 import secrets
 
@@ -12,6 +13,8 @@ router = APIRouter()
 @router.get("/session/login")
 async def login(request: Request, username: str, password: str):
     log("session", f"Host: {request.client.host} login")
+
+    password = get_hash(password)
 
     if not is_local(request):
         return {"error": "Invalid IP address"}
@@ -24,7 +27,7 @@ async def login(request: Request, username: str, password: str):
 
     await set_redis_val(session_id, f"{username}/{permission}", 60*60)
     
-    return {"success": "Login successful"}
+    return {"success": "Login successful", "session_id": session_id}
 
 @router.get("/session/check")
 async def check(request: Request, session_id: str):
