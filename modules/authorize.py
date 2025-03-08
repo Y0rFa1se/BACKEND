@@ -1,3 +1,5 @@
+from modules.redisdb import does_redis_exist, renew_redis_key
+
 from dotenv import load_dotenv
 import os
 
@@ -24,3 +26,14 @@ def authorize(request, password):
         return True
     
     return False
+
+def authorize_session(request, session_id=None):
+    if session_id is None:
+        return False
+    
+    if not does_redis_exist(session_id):
+        return False
+    
+    renew_redis_key(session_id, 60*60)
+    
+    return True
