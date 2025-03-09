@@ -28,6 +28,17 @@ async def is_password_right(username: str, password: str):
     
     return result["password"] == password
 
+async def get_users():
+    conn = await get_db_connection("web")
+    c = conn.cursor()
+
+    c.execute(f"SELECT username FROM users")
+    result = c.fetchall()
+
+    conn.close()
+
+    return result
+
 async def get_user_permission(username: str):
     conn = await get_db_connection("web")
     c = conn.cursor()

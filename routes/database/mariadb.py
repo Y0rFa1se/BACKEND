@@ -1,4 +1,4 @@
-from modules.mariadb import get_stock_prices, get_stock_tickers
+from modules.mariadb import get_stock_prices, get_stock_tickers, get_users
 from modules.authorize import authorize_session
 from modules.logs import log
 
@@ -23,3 +23,9 @@ async def api_get_stock_prices(request: Request, ticker: str, session_id: str):
         return {"error": "Invalid password"}
     
     return await get_stock_prices(ticker)
+
+@router.get("/web/users")
+async def api_get_web_users(request: Request):
+    log("mariadb", f"Host: {request.client.host}")
+
+    return await get_users()
