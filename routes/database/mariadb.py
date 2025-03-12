@@ -29,3 +29,7 @@ async def api_get_web_users(request: Request):
     log("mariadb", f"Host: {request.client.host}")
 
     return await get_users()
+
+@router.get("/web/permission")
+async def api_get_web_permission(request: Request, path: str):
+    return {"permission": 0}

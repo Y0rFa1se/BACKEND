@@ -70,4 +70,4 @@ async def get_permission(request: Request, session_id: str):
     if not await does_redis_exist(session_id):
         return {"error": "Invalid session ID"}
     
-    return {"permission": (await get_redis_val(session_id)).split("/")[1]}
+    return {"permission": int((await get_redis_val(session_id)).split("/")[1])}
