@@ -61,7 +61,7 @@ async def get_username(request: Request, session_id: str):
     if not await does_redis_exist(session_id):
         return {"error": "Invalid session ID"}
     
-    return {"username": (await get_redis_val(session_id)).split("/")[0]}
+    return {"username": (await get_redis_val(session_id)).decode().split("/")[0]}
 
 @router.get("/session/permission")
 async def get_permission(request: Request, session_id: str):
@@ -70,4 +70,6 @@ async def get_permission(request: Request, session_id: str):
     if not await does_redis_exist(session_id):
         return {"error": "Invalid session ID"}
     
-    return {"permission": int((await get_redis_val(session_id)).split("/")[1])}
+    print(await get_redis_val(session_id))
+
+    return {"permission": int((await get_redis_val(session_id)).decode().split("/")[1])}
